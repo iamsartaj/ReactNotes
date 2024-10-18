@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create UI With React API</title>
+    <link type="text/html" rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function App() {
+        const [tasks, setTasks] = React.useState([]);
+
+        const [inputText, setInputText] = React.useState("");
+        const [description, setDescription] = React.useState("");
+
+        const [editIndex, setEditIndex] = React.useState(-1);
+
+        function addTask(e) {
+          e.preventDefault();
+
+          let task = {
+            title: inputText,
+            description: description,
+          };
+
+          if (editIndex === -1) {
+            setTasks((prevTask) => {
+              return [...prevTask, task];
+            });
+          } else {
+            const updatedTasks = tasks.map((item, index) =>
+              index === editIndex ? task : item
+            );
+            setTasks(updatedTasks);
+            setEditIndex(-1);
+          }
+
+          setInputText("");
+          setDescription("");
+        }
+
+        const deleteTask = (i) => {
+          const filteredTask = tasks.filter((ele, index) => i !== index);
+          setTasks(filteredTask);
+        };
+
+        function editTask(i) {
+          const item = tasks[i];
+          setInputText(item.title);
+          setDescription(item.description);
+          setEditIndex(i);
+        }
+
+        return (
+          <>
+            <form>
+              <input
+                placeholder="Enter task"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+              ></input>
+              <input
+                placeholder="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></input>
+              <button onClick={addTask}>
+                {editIndex == -1 ? "Add task" : "update Task"}
+              </button>
+            </form>
+
+            <div>
+              {tasks.map((item, index) => (
+                <div key={index} style={{ border: "1px solid red" }}>
+                  <p>{item.title}</p>
+                  <p>{item.description}</p>
+                  <button
+                    onClick={() => {
+                      deleteTask(index);
+                    }}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => {
+                      editTask(index);
+                    }}
+                  >
+                    edit
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
