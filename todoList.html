@@ -17,10 +17,8 @@
     <script type="text/babel">
       function App() {
         const [tasks, setTasks] = React.useState([]);
-
         const [inputText, setInputText] = React.useState("");
         const [description, setDescription] = React.useState("");
-
         const [editIndex, setEditIndex] = React.useState(-1);
 
         function addTask(e) {
@@ -94,7 +92,7 @@
                       editTask(index);
                     }}
                   >
-                    edit
+                    Edit
                   </button>
                 </div>
               ))}
